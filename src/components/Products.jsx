@@ -2,18 +2,25 @@ import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { add } from "../store/cartSlice";
+import { getProducts } from "../store/productsSlice";
 
 export default function Products() {
-  const [product, setProduct] = useState([]);
-
+  
+  const dispatch = useDispatch()
+  const {data : products} = useSelector(state => state.products)
+  
   useEffect(() => {
-    axios.get("https://api.escuelajs.co/api/v1/products").then((res) => {
-      setProduct(res.data);
-    });
+    dispatch(getProducts())
   }, []);
 
-  const cards = product.map((product, idx) => (
+
+  const addToCart = (product) => {
+    dispatch(add(product))
+  }
+
+  const cards = products.map((product, idx) => (
     <div key={idx} className="col-md-3 my-2">
       <Card style={{ width: "18rem" }}>
         <Card.Img variant="top" src={product.images[0]} />
@@ -24,7 +31,7 @@ export default function Products() {
           </Card.Text>
         </Card.Body>
         <Card.Footer>
-          <Button variant="primary">Add to cart</Button>
+          <Button variant="primary" onClick={()=> addToCart(product)}>Add to cart</Button>
         </Card.Footer>
       </Card>
     </div>
