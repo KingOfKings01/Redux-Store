@@ -5,6 +5,7 @@ import axios from "axios"
 //* because api have objects {data, errors, status}
 const initialState = {
     data: [],
+    status: 'idle'
 }
 
 const productsSlice = createSlice({
@@ -12,8 +13,16 @@ const productsSlice = createSlice({
     initialState,
     reducers: {}, 
     extraReducers: (builder) => {
-        builder.addCase(getProducts.fulfilled, (state, action) => {
+        builder
+        .addCase(getProducts.pending, (state, action) => {
+            state.status = 'loading'
+        })
+        .addCase(getProducts.fulfilled, (state, action) => {
             state.data = action.payload
+            state.status = 'idle'
+        })
+        .addCase(getProducts.rejected, (state, action) => {
+            state.status = "error"
         })
     }
 })
