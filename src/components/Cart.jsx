@@ -34,7 +34,7 @@ export default function Cart() {
     <div>
       <h2>Cart</h2>
       <div className="row">
-        {cards}
+        {cards.length ? cards : <h1>Cart is empty</h1>}
       </div>
     </div>
   )
