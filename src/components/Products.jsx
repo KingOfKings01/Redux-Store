@@ -6,11 +6,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { add } from "../store/cartSlice";
 import { getProducts } from "../store/productsSlice";
 import { Pagination } from "@mui/material";
+import { BeatLoader } from "react-spinners";
 
 
 export default function Products() {
   const dispatch = useDispatch();
   const { data: products, status } = useSelector((state) => state.products);
+  const cart  = useSelector((state => state.cart))
 
   const [pageNumber, setPageNumber] = useState(1);
   const recordsPerPage = 12;
@@ -23,7 +25,7 @@ export default function Products() {
   }, []);
 
   if (status == "loading") {
-    return <h1>Loading...</h1>;
+    return <div style={{height:"500px"}} className='d-flex align-items-sm-center justify-content-center'><BeatLoader color="rgba(0, 0, 0, 1)" /></div>;
   }
 
   if (status == "error") {
@@ -37,18 +39,24 @@ export default function Products() {
   }
 
   const addToCart = (product) => {
-    dispatch(add(product));
+    if (!cart.includes(product)){
+      dispatch(add(product));
+    }
   };
 
   const handleChange = (event, value) => {
     setPageNumber(value);
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth', // Use smooth scrolling
+    });
   };
 
-  const cards = products.slice(firstIndex, lastIndex).map((product, idx) => {
+  const cards = products.map((product, idx) => {
     return (
-      <div key={idx} className="col-md-3 my-2">
+      <div key={idx} className="col-md-3 my-2 d-flex justify-content-center">
         <Card style={{ width: "18rem"}} className="d-flex flex-column">
-          <Card.Img className="card-img-top" variant="top" src={product.images[0]} />
+          <Card.Img variant="top" src={product.images[0]} />
           <Card.Body style={{height: "120px"}}>
             <Card.Title className="fs-6">{product.title}</Card.Title>
             <Card.Text>${product.price}</Card.Text>
@@ -65,13 +73,14 @@ export default function Products() {
 
   return (
     <>
-      <div className="row align-items-stretch">{cards}</div>
+      <div className="row">{cards.slice(firstIndex, lastIndex)}</div>
       {/* pageNumber: {pageNumber}
       <br />
       products : {products.length} */}
       <div className="d-flex justify-content-center">
         <Pagination
-          className="center"
+          className="my-5"
+          style={{paddingBottom:"100px"}}
           color="primary"
           count={numOfPages}
           siblingCount={3}

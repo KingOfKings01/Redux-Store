@@ -8,11 +8,18 @@ export default function RootLayout() {
   return (
     <>
       <Provider store={store}>
-        <NavBar />
+        <NavBar className="mb-2" />
 
         <main>
           <Outlet />
         </main>
+
+        <footer className="blockquote-footer bg-dark text-light pb-2 mt-2 mb-0 fixed-bottom">
+          <p>Developed with &#9829; by Asif Khan</p>
+          <p>
+            &copy; {new Date().getFullYear()} Asif Khan. All Rights Reserved.
+          </p>
+        </footer>
       </Provider>
     </>
   );

@@ -14,10 +14,10 @@ export default function Cart() {
   }
 
   const cards = products.map((product, idx) => (
-    <div key={idx} className="col-md-3 my-2">
+    <div key={idx} className="col-md-3 my-2 d-flex justify-content-center">
       <Card style={{ width: "18rem" }}>
         <Card.Img variant="top" src={product.images[0]} />
-        <Card.Body>
+        <Card.Body style={{height: "120px"}}>
           <Card.Title className="fs-5" >{product.title}</Card.Title>
           <Card.Text>
             ${product.price}
@@ -32,9 +32,8 @@ export default function Cart() {
 
   return (
     <div>
-      <h2>Cart</h2>
       <div className="row">
-        {cards.length ? cards : <h1>Cart is empty</h1>}
+        {cards.length ? cards : <div style={{height:"500px"}} className='d-flex flex-column justify-content-center'><h1>Cart is empty</h1></div>}
       </div>
     </div>
   )
